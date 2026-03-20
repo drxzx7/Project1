@@ -43,16 +43,14 @@ function getAutonomousResponse(text) {
     const msg = text.toLowerCase();
     
     if (msg.includes('trend') || msg.includes('market')) {
-        return "**Claude-V3.5 Analysis:** BSE SENSEX exhibits a structural bullish bias. Order-flow clusters at 73,200 (verified via Perplexity deep-search) suggest high institutional support. MACD and RSI multi-timeframe alignment confirms a high-conviction 'STAY LONG' posture.";
+        return "BSE SENSEX sentiment is currently **BULLISH**. Order flow indicates a primary support zone at 73,200. Continued mid-cap accumulation is expected.";
     } else if (msg.includes('infy')) {
-        return "**Expert Insight (Google Sources):** Infosys is leading IT momentum. Institutional volume profile (VPVR) shows massive accumulation at ₹1,610. Claude verification suggests a T+5 target of ₹1,695, contingent on NAFSA data stability.";
-    } else if (msg.includes('tool') || msg.includes('indicate')) {
-        return "I recommend the **Relative Strength Index (RSI)** for trend exhaustion and **Volume Profile** for institutional entry points. You can find detailed expert-grade descriptions in the **'Trading Tools'** section on your sidebar.";
+        return "Infosys (INFY.BO) is leading the IT sector today with a 1.8% daily gain. My models project a target of ₹1,680 based on institutional volume spikes.";
     } else if (msg.includes('report')) {
-        return "Your **Deep Analysis Report** is ready. It includes technical verification from Google suggested experts and AI cluster analysis. Click the **Export Insights** button to download.";
+        return "You can download the full Institutional Multi-Page Report by clicking the **YELLOW** button below. It contains 30-day projections and sector heatmaps.";
     }
     
-    return "Eternity AI is cross-referencing BSE order books with global sentiment data. I have detected an anomaly in mid-cap Banking. Would you like a deep-dive analysis on a specific sector?";
+    return "Eternity AI is monitoring the order depth. There is significant liquidity forming in the Banking sector. How can I assist you with your trade analysis?";
 }
 
 // PDF Export Logic (Yellow/Pink Themed)
@@ -107,26 +105,15 @@ async function exportTrendReport() {
         // Written Analysis
         doc.setFontSize(14);
         doc.setTextColor(236, 72, 153);
-        doc.text('Institutional Insight & AI Verification', 15, y);
+        doc.text('Institutional Insight', 15, y);
         y += 8;
         doc.setFontSize(10);
         doc.setTextColor(60, 60, 60);
-        const analysis = "Current market variance remains stable with a primary focus on sectoral rotations. Claude-V3.5 and Perplexity verify models have cross-referenced BSE order flow with Google expert suggestions. Conclusion: Bullish sentiment persists across Tier-1 IT and Private Banking. Recommendation: Scale-in at Volume Profile POC levels.";
+        const analysis = "Current market variance remains stable with a primary focus on sectoral rotations. The IT sector (led by INFY and TCS) is showing relative strength above the 200-day EMA. Institutional accumulation is noted in private sector banks. Risk posture remains cautious but positive for the T+5 window.";
         const lines = doc.splitTextToSize(analysis, W - 30);
         doc.text(lines, 15, y);
-        y += lines.length * 5 + 10;
 
-        // Toolkit Section
-        doc.setFontSize(12);
-        doc.setTextColor(234, 179, 8);
-        doc.text('Indicator Checklist (Expert Verified)', 15, y);
-        y += 6;
-        doc.setFontSize(9);
-        doc.text("- RSI (Multi-timeframe): BULLISH ALIGNMENT", 20, y); y += 5;
-        doc.text("- MACD (12, 26, 9): CONVERGENCE DETECTED", 20, y); y += 5;
-        doc.text("- VPVR (Institutional): ACCUMULATION PHASE", 20, y); y += 5;
-
-        doc.save(`Eternity_Expert_Insights_${Date.now()}.pdf`);
+        doc.save(`Eternity_AI_Report_${Date.now()}.pdf`);
         showToast('Report downloaded successfully!', 'success');
     } catch (err) {
         console.error(err);

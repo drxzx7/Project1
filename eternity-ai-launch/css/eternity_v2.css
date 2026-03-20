@@ -4,8 +4,6 @@
     --bg-deep: #050510;
     --accent-yellow: #eab308;
     --accent-pink: #ec4899;
-    --success: #10b981;
-    --danger: #ef4444;
     --text-primary: #ffffff;
     --text-secondary: #9ca3af;
     --glass-bg: rgba(255, 255, 255, 0.03);
@@ -23,43 +21,6 @@ body {
     height: 100vh;
     overflow: hidden;
     display: flex;
-    flex-direction: column; /* For ticker tape at top */
-}
-
-/* TICKER TAPE (CMC STYLE) */
-.ticker-tape {
-    height: 38px;
-    background: rgba(0, 0, 0, 0.8);
-    border-bottom: 1px solid var(--glass-border);
-    display: flex;
-    align-items: center;
-    overflow: hidden;
-    white-space: nowrap;
-    z-index: 1000;
-}
-
-.ticker-content {
-    display: inline-block;
-    animation: ticker 40s linear infinite;
-}
-
-.ticker-item {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    padding: 0 24px;
-    font-size: 11px;
-    font-weight: 600;
-    color: var(--text-secondary);
-}
-
-.ticker-label { color: #fff; }
-.ticker-up { color: var(--success); }
-.ticker-down { color: var(--danger); }
-
-@keyframes ticker {
-    0% { transform: translateX(0); }
-    100% { transform: translateX(-100%); }
 }
 
 /* Aurora Effect */
@@ -270,116 +231,27 @@ body {
     justify-content: center;
 }
 
-/* Tabs & Social Feed */
-.tabs-header {
-    display: flex;
-    gap: 4px;
-    background: rgba(255,255,255,0.02);
-    padding: 4px;
-    border-radius: 12px;
-    margin-bottom: 20px;
+/* Loading Animation */
+.loading-spinner {
+    width: 48px;
+    height: 48px;
+    border: 3px solid rgba(236, 72, 153, 0.1);
+    border-top: 3px solid var(--accent-pink);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin-bottom: 24px;
 }
 
-.tab-btn {
-    flex: 1;
-    padding: 10px;
-    border: none;
-    background: none;
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+.loading-text {
+    font-family: 'Outfit', sans-serif;
     color: var(--text-secondary);
-    font-size: 13px;
-    font-weight: 600;
-    cursor: pointer;
-    border-radius: 8px;
-    transition: all 0.2s;
+    letter-spacing: 1px;
 }
 
-.tab-btn.active {
-    background: var(--glass-bg);
-    color: #fff;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
-}
-
-.chat-tab-content { display: none; flex-direction: column; height: 100%; }
-.chat-tab-content.active { display: flex; }
-
-.official-feed {
-    flex: 1;
-    overflow-y: auto;
-    display: flex;
-    flex-direction: column;
-    gap: 16px;
-}
-
-.feed-item {
-    background: rgba(255,255,255,0.02);
-    border: 1px solid var(--glass-border);
-    border-radius: 16px;
-    padding: 16px;
-}
-
-.feed-header {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    margin-bottom: 8px;
-}
-
-.feed-avatar {
-    width: 24px;
-    height: 24px;
-    border-radius: 4px;
-    background: var(--accent-yellow);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-weight: 700;
-    font-size: 10px;
-    color: #000;
-}
-
-.feed-name { font-size: 13px; font-weight: 700; }
-.feed-time { font-size: 11px; color: var(--text-secondary); }
-
-.feed-body { font-size: 13px; line-height: 1.5; color: #ddd; margin-bottom: 12px; }
-
-/* Signals & Indicators */
-.signal-tag {
-    padding: 4px 12px;
-    border-radius: 8px;
-    font-size: 11px;
-    font-weight: 700;
-    letter-spacing: 0.5px;
-}
-
-.signal-tag.bullish { background: rgba(16, 185, 129, 0.1); color: var(--success); border: 1px solid rgba(16, 185, 129, 0.2); }
-.signal-tag.bearish { background: rgba(239, 68, 68, 0.1); color: var(--danger); border: 1px solid rgba(239, 68, 68, 0.2); }
-
-/* Tools Grid */
-.tools-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 20px;
-    padding: 20px;
-}
-
-.tool-card {
-    transition: all 0.3s;
-    border-left: 4px solid var(--glass-border);
-}
-
-.tool-card:hover {
-    border-left-color: var(--accent-yellow);
-    background: rgba(255,255,255,0.04);
-}
-
-.tool-card h4 { color: var(--accent-yellow); margin-bottom: 8px; }
-.tool-card p { font-size: 12px; color: var(--text-secondary); line-height: 1.6; }
-.tool-card .expert-badge {
-    display: inline-block;
-    margin-top: 12px;
-    font-size: 10px;
-    background: rgba(234, 179, 8, 0.1);
-    color: var(--accent-yellow);
-    padding: 2px 8px;
-    border-radius: 4px;
-}
+/* Scrollbar */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-thumb { background: var(--glass-border); border-radius: 10px; }
