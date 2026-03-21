@@ -595,3 +595,18 @@ function renderOfficialFeed() {
         </div>
     `).join('');
 }
+
+// INITIALIZATION
+window.addEventListener('DOMContentLoaded', () => {
+    lucide.createIcons();
+    checkBackendConnectivity();
+    renderOfficialFeed();
+    renderDashboard();
+    
+    // Auto-scroll ticker tape
+    const ticker = document.getElementById('tickerTape');
+    if (ticker) {
+        ticker.addEventListener('mouseover', () => ticker.style.animationPlayState = 'paused');
+        ticker.addEventListener('mouseout', () => ticker.style.animationPlayState = 'running');
+    }
+});
