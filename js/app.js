@@ -97,7 +97,10 @@ function switchChatTab(tabId) {
     event.currentTarget.classList.add('active');
     document.getElementById(tabId + 'Tab').classList.add('active');
     
-    function renderDashboard() {
+    if (tabId === 'feed') renderOfficialFeed();
+}
+
+function renderDashboard() {
     const mainContent = document.getElementById('mainContent');
     mainContent.innerHTML = `
         <div style="width: 100%; height: 100%; display: flex; flex-direction: column; gap: 16px; padding: 12px; overflow-y:auto;">
