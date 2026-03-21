@@ -181,6 +181,13 @@ body {
     display: flex;
     flex-direction: column;
     gap: 16px;
+    overflow: hidden;
+}
+
+#mainContent {
+    flex: 1;
+    overflow-y: auto !important;
+    padding: 0;
 }
 
 .top-bar {
