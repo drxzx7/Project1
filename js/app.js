@@ -97,7 +97,47 @@ function switchChatTab(tabId) {
     event.currentTarget.classList.add('active');
     document.getElementById(tabId + 'Tab').classList.add('active');
     
-    if (tabId === 'feed') renderOfficialFeed();
+    function renderDashboard() {
+    const mainContent = document.getElementById('mainContent');
+    mainContent.innerHTML = `
+        <div style="width: 100%; height: 100%; display: flex; flex-direction: column; gap: 16px; padding: 12px; overflow-y:auto;">
+            <div style="display: flex; justify-content: space-between; align-items: flex-end;">
+                <div>
+                    <h2 style="font-family: 'Outfit'; font-size: 24px; margin-bottom: 4px;">Institutional <span style="color:var(--accent-yellow)">Overview</span></h2>
+                    <p style="color: var(--text-secondary); font-size:12px;">Springpad AI Cluster Analysis: <span style="color:var(--accent-yellow); font-weight: 700;">VOLATILE BULLISH</span></p>
+                </div>
+                <div style="text-align: right;">
+                    <span style="font-size: 24px; font-weight: 800; color: var(--accent-yellow);">${marketPulse.score}</span>
+                    <span style="font-size: 11px; color: var(--text-secondary);">PRO CONFIDENCE</span>
+                </div>
+            </div>
+
+            <div class="content-grid-dense">
+                ${marketPulse.stocks.map(s => `
+                    <div class="glass-card" style="padding: 12px; border-top: 2px solid ${s.trend === 'up' ? 'var(--accent-yellow)' : 'var(--danger)'}; cursor:pointer;" onclick="openResearch('${s.symbol}')">
+                        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 8px;">
+                            <span style="font-weight: 700; font-size: 11px; color: var(--text-secondary);">${s.symbol}</span>
+                            <span class="signal-tag bullish" style="font-size:8px; padding:2px 6px;">${s.mkt}</span>
+                        </div>
+                        <div style="font-size: 16px; font-weight: 800; margin-bottom: 2px;">₹${s.price}</div>
+                        <div style="font-size: 10px; color: ${s.trend === 'up' ? 'var(--accent-yellow)' : 'var(--danger)'}; font-weight: 600;">${s.change}</div>
+                    </div>
+                `).join('')}
+            </div>
+
+            <div class="glass-card" style="flex: 1; min-height: 250px; padding: 16px;">
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 12px;">
+                    <h4 style="font-size: 11px; color: var(--text-secondary); letter-spacing: 1px;">SENSEX INSTITUTIONAL ORDER CLUSTERS</h4>
+                    <div style="display:flex; gap:6px;">
+                        <button class="signal-tag bullish" style="cursor:pointer; background:var(--accent-yellow); color:#000;">TV INDICATORS</button>
+                        <button class="signal-tag bullish" style="cursor:pointer;">SPRINGPAD AI</button>
+                    </div>
+                </div>
+                <div style="height:200px;"><canvas id="marketChart"></canvas></div>
+            </div>
+        </div>
+    `;
+    initMarketChart();
 }
 
 function renderMarkets() {
@@ -142,20 +182,78 @@ function renderMarkets() {
                 </thead>
                 <tbody>
                     ${assets.map(a => `
-                        <tr style="border-bottom: 1px solid var(--glass-border); transition: background 0.2s;" onmouseover="this.style.background='rgba(255,255,255,0.02)'" onmouseout="this.style.background='transparent'">
+                        <tr style="border-bottom: 1px solid var(--glass-border); transition: background 0.2s; cursor:pointer;" onmouseover="this.style.background='rgba(234,179,8,0.05)'" onmouseout="this.style.background='transparent'" onclick="openResearch('${a.sym}')">
                             <td style="padding:16px 8px; color:var(--text-secondary);">${a.rank}</td>
                             <td style="padding:16px 8px;"><div style="font-weight:700;">${a.name}</div><div style="font-size:10px; color:var(--text-secondary);">${a.sym}</div></td>
                             <td style="padding:16px 8px; font-weight:600;">₹${a.price}</td>
                             <td style="padding:16px 8px; color:${a.change.includes('+') ? 'var(--success)' : 'var(--danger)'}; font-weight:700;">${a.change}</td>
                             <td style="padding:16px 8px;">₹${a.vol}</td>
                             <td style="padding:16px 8px;">₹${a.mkt}</td>
-                            <td style="padding:16px 8px;"><button class="signal-tag bullish" onclick="openResearch('${a.sym}')" style="cursor:pointer;">RESEARCH</button></td>
+                            <td style="padding:16px 8px;"><button class="signal-tag bullish" style="pointer-events:none;">RESEARCH</button></td>
                         </tr>
                     `).join('')}
                 </tbody>
             </table>
         </div>
     `;
+}
+
+let activeCharts = [];
+
+function openResearch(symbol) {
+    const s = marketPulse.stocks.find(x => x.symbol === symbol) || { symbol: symbol };
+    document.getElementById('researchSymbol').innerHTML = `${symbol.split('.')[0]} <span style="color:var(--accent-yellow)">RESEARCH</span>`;
+    document.getElementById('springpadInsightText').innerText = `Springpad AI predicts 94.2% bullish outcome for ${symbol} over T+30 window. Institutional accumulation detected in Bar Volume spikes.`;
+    
+    toggleModal('researchModal');
+    
+    // Cleanup old charts
+    activeCharts.forEach(c => { if(c && typeof c.destroy === 'function') c.destroy(); });
+    activeCharts = [];
+
+    // PIE CHART
+    const pieCtx = document.getElementById('pieChartResearch').getContext('2d');
+    activeCharts.push(new Chart(pieCtx, {
+        type: 'pie',
+        data: {
+            labels: ['Institutional', 'Retail', 'Promoters', 'Others'],
+            datasets: [{
+                data: [45, 15, 30, 10],
+                backgroundColor: ['#eab308', '#ec4899', '#10b981', '#6b7280'],
+                borderWidth: 0
+            }]
+        },
+        options: { plugins: { legend: { position: 'right', labels: { color: '#fff', font: { size: 10 } } } } }
+    }));
+
+    // BAR CHART
+    const barCtx = document.getElementById('barChartResearch').getContext('2d');
+    activeCharts.push(new Chart(barCtx, {
+        type: 'bar',
+        data: {
+            labels: ['Q1', 'Q2', 'Q3', 'Q4'],
+            datasets: [{
+                label: 'Volume (B)',
+                data: [12, 19, 15, 24],
+                backgroundColor: '#eab308'
+            }]
+        },
+        options: { scales: { y: { grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { color: '#fff' } }, x: { ticks: { color: '#fff' } } } }
+    }));
+
+    // LINE CHART
+    const lineCtx = document.getElementById('lineChartResearch').getContext('2d');
+    activeCharts.push(new Chart(lineCtx, {
+        type: 'line',
+        data: {
+            labels: Array.from({length: 30}, (_, i) => `D${i+1}`),
+            datasets: [
+                { label: 'Actual Price', data: Array.from({length: 15}, () => Math.random() * 10 + 100), borderColor: '#fff', tension: 0.4 },
+                { label: 'AI Forecast', data: Array.from({length: 30}, (_, i) => (i < 15 ? null : 110 + (i-15)*1.5)), borderColor: '#eab308', borderDash: [5, 5], tension: 0.4 }
+            ]
+        },
+        options: { maintainAspectRatio: false, scales: { y: { ticks: { color: '#fff' } }, x: { ticks: { color: '#fff' } } } }
+    }));
 }
 
 function renderTrades() {
