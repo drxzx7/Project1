@@ -18,6 +18,15 @@
 <body>
     <div class="aurora"></div>
 
+    <!-- GLOBAL STATS BAR (CMC STYLE) -->
+    <div class="global-stats-bar">
+        <div class="stat-item">Global Market Cap: <span>$2.56T</span> <span style="color:var(--success)">+1.2%</span></div>
+        <div class="stat-item">24h Volume: <span>$84.2B</span></div>
+        <div class="stat-item">Dominance: <span>BTC 52.4%</span></div>
+        <div class="stat-item">Fear & Greed: <span style="color:var(--accent-yellow)">64 (GREED)</span></div>
+        <div style="margin-left: auto;">Eth Gas: <span>14 Gwei</span></div>
+    </div>
+
     <!-- CMC STYLE TICKER TAPE -->
     <div class="ticker-tape" id="tickerTape">
         <div class="ticker-content">
@@ -45,9 +54,10 @@
             <nav style="flex: 1;">
                 <a href="#" class="nav-item active" onclick="switchView('dashboard')"><i data-lucide="layout-grid"></i> Dashboard</a>
                 <a href="#" class="nav-item" onclick="switchView('markets')"><i data-lucide="bar-chart-2"></i> Markets</a>
-                <a href="#" class="nav-item" onclick="switchView('analytics')" style="color:var(--accent-pink);"><i data-lucide="book-open"></i> Data Analytics</a>
+                <a href="#" class="nav-item" onclick="switchView('analytics')" style="color:var(--accent-yellow);"><i data-lucide="book-open"></i> Analyst Pro</a>
+                <a href="#" class="nav-item" onclick="switchView('launchpad')" style="color:var(--accent-gold);"><i data-lucide="rocket"></i> Launchpad (NEW)</a>
                 <a href="#" class="nav-item" onclick="switchView('trades')"><i data-lucide="arrow-left-right"></i> Trades</a>
-                <a href="#" class="nav-item" onclick="switchView('portfolio')"><i data-lucide="pie-chart"></i> Portfolio</a>
+                <a href="#" class="nav-item" onclick="switchView('portfolio')"><i data-lucide="pie-chart"></i> Wealth</a>
                 <a href="#" class="nav-item" onclick="switchView('tools')" style="color: var(--accent-yellow);"><i data-lucide="activity"></i> Trading Tools</a>
                 <a href="#" class="nav-item" onclick="switchView('settings')"><i data-lucide="settings"></i> Settings</a>
             </nav>
@@ -121,6 +131,40 @@
                 <i data-lucide="file-text"></i> Export Insights
             </button>
         </aside>
+    </div>
+
+    <!-- DEEP RESEARCH MODAL (INTERACTIVE CHARTS) -->
+    <div id="researchModal" class="modal-overlay">
+        <div class="glass-card modal-content large">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:24px;">
+                <div>
+                    <h3 id="researchSymbol" style="font-family:'Outfit'; font-size:32px; margin-bottom:4px;">STOCK <span style="color:var(--accent-yellow)">RESEARCH</span></h3>
+                    <p id="researchSubtitle" style="color:var(--text-secondary); font-size:14px;">Institutional Depth & AI Forecasting Cluster</p>
+                </div>
+                <button onclick="toggleModal('researchModal')" style="background:none; border:none; color:var(--text-secondary); cursor:pointer; font-size:24px;"><i class="fas fa-times"></i></button>
+            </div>
+            
+            <div class="charts-row">
+                <div class="chart-container-modal">
+                    <h4 style="margin-bottom:12px; font-size:12px; color:var(--text-secondary);">I: PIE CHART (HOLDER DISTRIBUTION)</h4>
+                    <canvas id="pieChartResearch"></canvas>
+                </div>
+                <div class="chart-container-modal">
+                    <h4 style="margin-bottom:12px; font-size:12px; color:var(--text-secondary);">II: BAR CHART (QUARTERLY VOLUME)</h4>
+                    <canvas id="barChartResearch"></canvas>
+                </div>
+            </div>
+
+            <div class="chart-container-modal" style="margin-top:20px; height: 300px;">
+                <h4 style="margin-bottom:12px; font-size:12px; color:var(--text-secondary);">III: LINEAR FORECAST (T+30 PREDICTION)</h4>
+                <canvas id="lineChartResearch"></canvas>
+            </div>
+
+            <div style="margin-top: 24px; padding: 20px; background: rgba(234, 179, 8, 0.05); border-radius: 16px; border-left: 4px solid var(--accent-yellow);">
+                <h5 style="color:var(--accent-yellow); margin-bottom:8px;">Springpad AI Insight</h5>
+                <p id="springpadInsightText" style="font-size:13px; opacity:0.8;">Analyzing data clusters...</p>
+            </div>
+        </div>
     </div>
 
     <!-- SETTINGS MODAL (API KEYS) -->

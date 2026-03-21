@@ -3,12 +3,21 @@ const SPRING_BOOT_URL = "http://localhost:8080";
 
 const marketPulse = {
     status: "BULLISH",
-    score: 82,
+    score: 88,
+    global: { cap: "2.56T", vol: "84.2B", dominance: "52.4%" },
     stocks: [
-        { symbol: "INFY.BO", price: "1,620.80", change: "+1.8%", trend: "up" },
-        { symbol: "SBIN.BO", price: "765.20", change: "+2.8%", trend: "up" },
-        { symbol: "RELIANCE.BO", price: "2,985.40", change: "+1.2%", trend: "up" },
-        { symbol: "TCS.BO", price: "3,842.10", change: "+2.4%", trend: "up" }
+        { symbol: "INFY.BO", price: "1,620.80", change: "+1.8%", trend: "up", mkt: "450B" },
+        { symbol: "SBIN.BO", price: "765.20", change: "+2.8%", trend: "up", mkt: "1.2T" },
+        { symbol: "RELIANCE.BO", price: "2,985.40", change: "+1.2%", trend: "up", mkt: "18.4T" },
+        { symbol: "TCS.BO", price: "3,842.10", change: "+2.4%", trend: "up", mkt: "14.1T" },
+        { symbol: "HDFCBANK.BO", price: "1,442.20", change: "-1.2%", trend: "down", mkt: "11T" },
+        { symbol: "ICICIBANK.BO", price: "1,085.30", change: "+0.5%", trend: "up", mkt: "7.6T" },
+        { symbol: "WIPRO.BO", price: "482.15", change: "+3.2%", trend: "up", mkt: "2.5T" },
+        { symbol: "AXISBANK.BO", price: "1,045.00", change: "-0.8%", trend: "down", mkt: "3.2T" },
+        { symbol: "BHARTIARTL.BO", price: "1,210.40", change: "+4.1%", trend: "up", mkt: "6.8T" },
+        { symbol: "ADANIENT.BO", price: "3,120.00", change: "+2.1%", trend: "up", mkt: "3.5T" },
+        { symbol: "TATAMOTORS.BO", price: "965.20", change: "+1.5%", trend: "up", mkt: "3.2T" },
+        { symbol: "ITC.BO", price: "412.30", change: "-0.4%", trend: "down", mkt: "5.1T" }
     ]
 };
 
@@ -19,6 +28,7 @@ function switchView(viewId) {
     });
 
     if (viewId === 'dashboard') renderDashboard();
+    else if (viewId === 'launchpad') renderLaunchpad();
     else if (viewId === 'tools') renderTradingTools();
     else if (viewId === 'settings') toggleSettings();
     else if (viewId === 'analytics') renderDetailedAnalytics();
@@ -27,9 +37,8 @@ function switchView(viewId) {
     }
 }
 
-function toggleSettings() {
-    const modal = document.getElementById('settingsModal');
-    if (modal) modal.classList.toggle('active');
+function toggleModal(id) {
+    document.getElementById(id).classList.toggle('active');
 }
 
 function renderDetailedAnalytics() {
@@ -93,64 +102,171 @@ function switchChatTab(tabId) {
 
 function renderDashboard() {
     const mainContent = document.getElementById('mainContent');
-    
-    // Show loading state first as per screenshot
     mainContent.innerHTML = `
-        <div id="loadingState" style="display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%;">
-            <div class="loading-spinner"></div>
-            <div class="loading-text">Initializing AI Models...</div>
+        <div style="width: 100%; height: 100%; display: flex; flex-direction: column; gap: 16px; padding: 12px; overflow-y:auto;">
+            <div style="display: flex; justify-content: space-between; align-items: flex-end;">
+                <div>
+                    <h2 style="font-family: 'Outfit'; font-size: 24px; margin-bottom: 4px;">Institutional <span style="color:var(--accent-yellow)">Overview</span></h2>
+                    <p style="color: var(--text-secondary); font-size:12px;">Springpad AI Cluster Analysis: <span style="color:var(--accent-yellow); font-weight: 700;">VOLATILE BULLISH</span></p>
+                </div>
+                <div style="text-align: right;">
+                    <span style="font-size: 24px; font-weight: 800; color: var(--accent-yellow);">${marketPulse.score}</span>
+                    <span style="font-size: 11px; color: var(--text-secondary);">PRO CONFIDENCE</span>
+                </div>
+            </div>
+
+            <div class="content-grid-dense">
+                ${marketPulse.stocks.map(s => `
+                    <div class="glass-card" style="padding: 12px; border-top: 2px solid ${s.trend === 'up' ? 'var(--accent-yellow)' : 'var(--danger)'}; cursor:pointer;" onclick="openResearch('${s.symbol}')">
+                        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 8px;">
+                            <span style="font-weight: 700; font-size: 11px; color: var(--text-secondary);">${s.symbol}</span>
+                            <span class="signal-tag bullish" style="font-size:8px; padding:2px 6px;">${s.mkt}</span>
+                        </div>
+                        <div style="font-size: 16px; font-weight: 800; margin-bottom: 2px;">₹${s.price}</div>
+                        <div style="font-size: 10px; color: ${s.trend === 'up' ? 'var(--accent-yellow)' : 'var(--danger)'}; font-weight: 600;">${s.change}</div>
+                    </div>
+                `).join('')}
+            </div>
+
+            <div class="glass-card" style="flex: 1; min-height: 250px; padding: 16px;">
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 12px;">
+                    <h4 style="font-size: 11px; color: var(--text-secondary); letter-spacing: 1px;">SENSEX INSTITUTIONAL ORDER CLUSTERS</h4>
+                    <div style="display:flex; gap:6px;">
+                        <button class="signal-tag bullish" style="cursor:pointer; background:var(--accent-yellow); color:#000;">TV INDICATORS</button>
+                        <button class="signal-tag bullish" style="cursor:pointer;">SPRINGPAD AI</button>
+                    </div>
+                </div>
+                <div style="height:200px;"><canvas id="marketChart"></canvas></div>
+            </div>
         </div>
     `;
+    initMarketChart();
+}
 
-    // Simulate model initialization transition
-    setTimeout(() => {
-        mainContent.innerHTML = `
-            <div style="width: 100%; height: 100%; display: flex; flex-direction: column; gap: 24px; padding: 20px;">
-                <div style="display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 20px;">
-                    <div>
-                        <h2 style="font-family: 'Outfit'; font-size: 28px; margin-bottom: 8px;">Institutional <span style="color:var(--accent-yellow)">Overview</span></h2>
-                        <p style="color: var(--text-secondary);">Market Sentiment: <span style="color:#10b981; font-weight: 700;">${marketPulse.status}</span></p>
+let activeCharts = [];
+
+function openResearch(symbol) {
+    const s = marketPulse.stocks.find(x => x.symbol === symbol);
+    document.getElementById('researchSymbol').innerHTML = `${symbol.split('.')[0]} <span style="color:var(--accent-yellow)">RESEARCH</span>`;
+    document.getElementById('springpadInsightText').innerText = `Springpad AI predicts 94.2% bullish outcome for ${symbol} over T+30 window. Institutional accumulation detected in Bar Volume spikes.`;
+    
+    toggleModal('researchModal');
+    
+    // Cleanup old charts
+    activeCharts.forEach(c => c.destroy());
+    activeCharts = [];
+
+    // PIE CHART
+    const pieCtx = document.getElementById('pieChartResearch').getContext('2d');
+    activeCharts.push(new Chart(pieCtx, {
+        type: 'pie',
+        data: {
+            labels: ['Institutional', 'Retail', 'Promoters', 'Others'],
+            datasets: [{
+                data: [45, 15, 30, 10],
+                backgroundColor: ['#eab308', '#ec4899', '#10b981', '#6b7280'],
+                borderWidth: 0
+            }]
+        },
+        options: { plugins: { legend: { position: 'right', labels: { color: '#fff', font: { size: 10 } } } } }
+    }));
+
+    // BAR CHART
+    const barCtx = document.getElementById('barChartResearch').getContext('2d');
+    activeCharts.push(new Chart(barCtx, {
+        type: 'bar',
+        data: {
+            labels: ['Q1', 'Q2', 'Q3', 'Q4'],
+            datasets: [{
+                label: 'Volume (B)',
+                data: [12, 19, 15, 24],
+                backgroundColor: '#eab308'
+            }]
+        },
+        options: { scales: { y: { grid: { color: 'rgba(255,255,255,0.05)' } } } }
+    }));
+
+    // LINE CHART
+    const lineCtx = document.getElementById('lineChartResearch').getContext('2d');
+    activeCharts.push(new Chart(lineCtx, {
+        type: 'line',
+        data: {
+            labels: Array.from({length: 30}, (_, i) => `D${i+1}`),
+            datasets: [
+                { label: 'Actual Price', data: Array.from({length: 15}, () => Math.random() * 10 + 100), borderColor: '#fff' },
+                { label: 'AI Forecast', data: Array.from({length: 30}, (_, i) => (i < 15 ? null : 110 + (i-15)*1.5)), borderColor: '#eab308', borderDash: [5, 5] }
+            ]
+        },
+        options: { maintainAspectRatio: false }
+    }));
+}
+
+function renderLaunchpad() {
+    const mainContent = document.getElementById('mainContent');
+    mainContent.innerHTML = `
+        <div style="padding: 24px; overflow-y: auto; height: 100%;">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:32px;">
+                <div>
+                    <h2 style="font-family:'Outfit'; font-size: 32px; margin-bottom: 8px;">Springpad <span style="color:var(--accent-yellow)">Launchpad</span></h2>
+                    <p style="color:var(--text-secondary);">Institutional Tier-1 Projects & AI-Powered Wealth Strategies</p>
+                </div>
+                <button class="nav-item" style="background:var(--accent-yellow); color:#000; font-weight:700; justify-content:center; cursor:pointer;">PROPOSE PROJECT</button>
+            </div>
+
+            <div class="charts-row" style="margin-top:0; margin-bottom:24px;">
+                <div class="glass-card" style="border-left: 4px solid var(--accent-yellow);">
+                    <h4 style="margin-bottom:12px; color:var(--accent-yellow);">Trade Idea Generator</h4>
+                    <p style="font-size:12px; opacity:0.8; margin-bottom:16px;">AI Cluster: "Seasonality confirms bullish breakout for Bank Nifty in Q3."</p>
+                    <button class="signal-tag bullish" style="width:100%; cursor:pointer;">GENERATE PROMPT</button>
+                </div>
+                <div class="glass-card" style="border-left: 4px solid var(--accent-gold);">
+                    <h4 style="margin-bottom:12px; color:var(--accent-gold);">Market Analyst Pro</h4>
+                    <p style="font-size:12px; opacity:0.8; margin-bottom:16px;">Expert Logic: Accumulation detected at 22,100 support levels.</p>
+                    <button class="signal-tag bullish" style="width:100%; border-color:var(--accent-gold); color:var(--accent-gold); cursor:pointer;">VIEW STRATEGY</button>
+                </div>
+            </div>
+
+            <h4 style="font-size:11px; margin-bottom:16px; letter-spacing:1px; color:var(--text-secondary);">UPCOMING SPRINGPAD PROJECTS</h4>
+            <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(400px, 1fr)); gap:20px;">
+                <div class="glass-card" style="position:relative;">
+                    <div style="display:flex; gap:16px; margin-bottom:16px;">
+                        <div style="width:50px; height:50px; background:var(--accent-yellow); border-radius:12px; display:flex; align-items:center; justify-content:center; color:#000; font-weight:800;">E-AI</div>
+                        <div>
+                            <h5 style="font-size:18px;">Eternity Protocol V3</h5>
+                            <span style="font-size:10px; color:var(--accent-yellow);">PHASE: PRIVATE ROUND</span>
+                        </div>
                     </div>
-                    <div style="text-align: right;">
-                        <span style="font-size: 32px; font-weight: 800; color: var(--accent-pink);">${marketPulse.score}</span>
-                        <span style="font-size: 14px; color: var(--text-secondary);">AI CONFIDENCE</span>
+                    <p style="font-size:12px; margin-bottom:16px; opacity:0.7;">Decentralized Order Flow Intelligence. Predictive accuracy benchmarked at 94.2%.</p>
+                    <div style="height:6px; background:rgba(255,255,255,0.05); border-radius:3px; margin-bottom:8px; overflow:hidden;">
+                        <div style="width:75%; height:100%; background:var(--accent-yellow);"></div>
+                    </div>
+                    <div style="display:flex; justify-content:space-between; font-size:10px; color:var(--text-secondary);">
+                        <span>Raised: $7.5M / $10M</span>
+                        <span>75% Complete</span>
                     </div>
                 </div>
-
-                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px;">
-                    ${marketPulse.stocks.map(s => `
-                        <div class="glass-card" style="padding: 20px; border-top: 2px solid ${s.trend === 'up' ? '#10b981' : '#ef4444'}; position:relative; overflow:hidden;">
-                            <div style="font-weight: 700; font-size: 14px; margin-bottom: 8px; color: var(--text-secondary);">${s.symbol}</div>
-                            <div style="font-size: 20px; font-weight: 800; margin-bottom: 4px;">₹${s.price}</div>
-                            <div style="font-size: 12px; color: #10b981; font-weight: 600; margin-bottom:12px;">${s.change}</div>
-                            
-                            <!-- OLYMP TRADE STYLE QUICK BUTTONS -->
-                            <div style="display:flex; gap:8px;">
-                                <button class="signal-tag bullish" style="flex:1; cursor:pointer;" onclick="showToast('HIGHER order placed', 'success')">HIGHER</button>
-                                <button class="signal-tag bearish" style="flex:1; cursor:pointer;" onclick="showToast('LOWER order placed', 'success')">LOWER</button>
-                            </div>
+                
+                <div class="glass-card">
+                    <h5 style="margin-bottom:12px; color:var(--accent-yellow);">Institutional Roadmap</h5>
+                    <div style="display:flex; flex-direction:column; gap:12px;">
+                        <div style="display:flex; gap:12px; align-items:center;">
+                            <div style="width:8px; height:8px; background:var(--success); border-radius:50%;"></div>
+                            <span style="font-size:12px; opacity:0.8;">Q1: BSE Integration Finalized</span>
                         </div>
-                    `).join('')}
-                </div>
-
-                <div style="flex: 1; min-height: 200px; padding-top: 20px;">
-                    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 16px;">
-                        <h4 style="font-size: 14px; color: var(--text-secondary); letter-spacing: 1px;">BSE SENSEX ORDER FLOW DEPTH</h4>
-                        <!-- TRADINGVIEW STYLE CONTROLS -->
-                        <div style="display:flex; gap:8px;">
-                            <button class="signal-tag" style="background:rgba(255,255,255,0.05); cursor:pointer;">15M</button>
-                            <button class="signal-tag active" style="background:var(--accent-pink); color:#fff; cursor:pointer;">1H</button>
-                            <button class="signal-tag" style="background:rgba(255,255,255,0.05); cursor:pointer;">4H</button>
-                            <button class="signal-tag" style="background:rgba(234, 179, 8, 0.1); color:var(--accent-yellow); cursor:pointer;"><i data-lucide="plus" style="width:12px; height:12px;"></i> Indicators</button>
+                        <div style="display:flex; gap:12px; align-items:center;">
+                            <div style="width:8px; height:8px; background:var(--accent-yellow); border-radius:50%;"></div>
+                            <span style="font-size:12px; font-weight:700;">Q2: AI Forecast Engine Beta (Live)</span>
+                        </div>
+                        <div style="display:flex; gap:12px; align-items:center;">
+                            <div style="width:8px; height:8px; background:rgba(255,255,255,0.1); border-radius:50%;"></div>
+                            <span style="font-size:12px; opacity:0.5;">Q3: Cross-Chain Liquidity Heatmaps</span>
                         </div>
                     </div>
-                    <canvas id="marketChart" style="background: rgba(0,0,0,0.2); border-radius: 12px;"></canvas>
                 </div>
             </div>
         </div>
-        `;
-        initMarketChart();
-    }, 1500);
+    `;
+    lucide.createIcons();
 }
 
 function initMarketChart() {
