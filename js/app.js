@@ -271,7 +271,7 @@ function renderWealth() {
     `;
     setTimeout(() => {
         new Chart(document.getElementById('allocationPie').getContext('2d'), { type: 'pie', data: { labels: ['Tech', 'Banking', 'Energy', 'Cash'], datasets: [{ data: [40, 25, 20, 15], backgroundColor: ['#eab308', '#ec4899', '#10b981', '#6b7280'], borderWidth: 0 }] }, options: { plugins: { legend: { position: 'right', labels: { color: '#fff' } } } } });
-        new Chart(document.getElementById('growthLine').getContext('2d'), { type: 'line', data: { labels: ['Jan', 'Feb', 'Mar'], datasets: [{ label: 'Growth', data: [1M, 1.1M, 1.24M], borderColor: '#eab308', tension: 0.4 }] }, options: { plugins: { legend: { display: false } }, scales: { x: { display: false }, y: { display: false } } } });
+        new Chart(document.getElementById('growthLine').getContext('2d'), { type: 'line', data: { labels: ['Jan', 'Feb', 'Mar'], datasets: [{ label: 'Growth', data: [1000000, 1100000, 1245280], borderColor: '#eab308', tension: 0.4 }] }, options: { plugins: { legend: { display: false } }, scales: { x: { display: false }, y: { display: false } } } });
     }, 100);
 }
 
